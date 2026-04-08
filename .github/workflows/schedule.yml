@@ -37,6 +37,10 @@ jobs:
           else
             git remote add origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           fi
-          git add *_stocks.txt 2>/dev/null || echo "No data files"
-          git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" 2>/dev/null || echo "No new data"
-          git push origin main 2>/dev/null || echo "Done"
+          if ls *_stocks.txt 1> /dev/null 2>&1; then
+            git add *_stocks.txt
+            git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" || echo "No changes"
+            git push origin main
+          else
+            echo "No data files found"
+          fi
