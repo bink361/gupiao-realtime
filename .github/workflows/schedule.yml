@@ -25,7 +25,8 @@ jobs:
       
       - name: 执行脚本
         run: |
-          python fetch_stocks.py 2>&1
+          python fetch_stocks.py
+          ls -la *.txt
       
       - name: 提交数据文件
         run: |
