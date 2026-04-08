@@ -31,8 +31,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git init
-          git remote add origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add *_stocks.txt || echo "No data files to commit"
-          git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" || echo "No new data"
-          git push origin main || echo "No data to push"
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git add *_stocks.txt 2>/dev/null || echo "No data files"
+          git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" 2>/dev/null || echo "No new data"
+          git push origin main 2>/dev/null || echo "Done"
