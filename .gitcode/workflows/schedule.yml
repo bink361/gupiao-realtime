@@ -1,0 +1,35 @@
+name: 每日股票数据获取
+
+on:
+  # 每天 17:00 执行（北京时间）
+  schedule:
+    - cron: '0 9 * * *'  # UTC 9:00 = 北京时间 17:00
+  # 手动触发
+  workflow_dispatch:
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+      
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+      
+      - name: 执行脚本
+        run: python fetch_stocks.py
+      
+      - name: 提交数据文件
+        run: |
+          git config --local user.email "action@gitcode.com"
+          git config --local user.name "GitCode Action"
+          git add *_stocks.txt
+          git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" || echo "No new data to commit"
+          git push
