@@ -31,7 +31,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          if git remote -v | grep -q "github.com"; then
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          else
+            git remote add origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          fi
           git add *_stocks.txt 2>/dev/null || echo "No data files"
           git commit -m "Update stock data $(date '+%Y-%m-%d %H:%M')" 2>/dev/null || echo "No new data"
           git push origin main 2>/dev/null || echo "Done"
