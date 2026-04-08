@@ -24,7 +24,8 @@ jobs:
         run: pip install -r requirements.txt
       
       - name: 执行脚本
-        run: python fetch_stocks.py
+        run: |
+          python fetch_stocks.py 2>&1
       
       - name: 提交数据文件
         run: |
